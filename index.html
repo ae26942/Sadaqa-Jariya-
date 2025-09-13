@@ -1,184 +1,252 @@
-public class Main {
-    public static void main(String[] args){
-    //start coding
-    }
-}
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صدقة جارية</title>
+    <title>صدقة جارية للمتوفي</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: #f3f4f6;
             direction: rtl;
         }
-        .prayer-container {
+        .tab-content {
+            min-height: calc(100vh - 10rem);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 2rem;
             position: relative;
-            background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 24px;
-            margin-bottom: 24px;
-            overflow: hidden;
-        }
-        .prayer-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.9));
-            z-index: 1;
-        }
-        .prayer-text {
-            position: relative;
-            z-index: 2;
-            font-size: 1.25rem;
-            line-height: 1.8;
-            color: #4a5568;
         }
         .counter-btn {
-            background-color: #4CAF50; /* A green color for the button */
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: all 0.3s ease;
+            transform: scale(1);
         }
-        .counter-btn:hover {
-            transform: translateY(-2px);
+        .counter-btn:active {
+            transform: scale(0.95);
         }
-        .counter-btn.color-1 { background-color: #FF5722; }
-        .counter-btn.color-2 { background-color: #FFC107; }
-        .counter-btn.color-3 { background-color: #00BCD4; }
-        .counter-btn.color-4 { background-color: #9C27B0; }
-        .counter-btn.color-5 { background-color: #607D8B; }
+        .counter-color-orange { background-color: #f97316; }
+        .counter-color-sky { background-color: #0ea5e9; }
+        .counter-color-yellow { background-color: #f59e0b; }
+        .tab-color-1 { background-color: #87CEEB; } /* سماوي */
+        .tab-color-2 { background-color: #FFD700; } /* أصفر */
+        .tab-color-3 { background-color: #FFA500; } /* برتقالي */
 
-        .image-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 32px;
-        }
-        .image-container img {
+        .bubble {
+            background-color: rgba(255, 255, 255, 0.85);
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
         }
-        
     </style>
 </head>
-<body class="p-8">
+<body class="bg-gray-100">
 
-    <main class="max-w-4xl mx-auto">
-        <h1 class="text-4xl font-bold text-center text-gray-800 mb-6">صدقة جارية لي ولوالدي</h1>
-        <p class="text-center text-lg text-gray-600 mb-12">أجر يتجدد بفضل الله ورحمته</p>
-
-        <!-- Counter 1: Tasbeeh -->
-        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-8 text-center">
-            <p class="text-2xl md:text-3xl font-bold text-gray-700 mb-4">سبحان الله وبحمده سبحان الله العظيم</p>
-            <div id="tasbeehCounter" class="text-5xl md:text-6xl font-extrabold text-blue-600 mb-6">0</div>
-            <button id="tasbeehBtn" class="w-full px-6 py-4 rounded-full text-white font-bold text-xl shadow-md counter-btn">
-                اضغط هنا
+    <!-- Tab Navigation -->
+    <nav class="sticky top-0 z-50 w-full bg-white shadow-lg rounded-b-xl">
+        <div class="max-w-4xl mx-auto flex justify-around p-4">
+            <button id="tab1-btn" class="py-2 px-4 md:px-6 rounded-full text-lg font-bold text-white bg-green-600 transition-colors duration-300 transform scale-105">
+                أذكار وأدعية
+            </button>
+            <button id="tab2-btn" class="py-2 px-4 md:px-6 rounded-full text-lg font-bold text-gray-700 bg-gray-200 transition-colors duration-300">
+                سور قرآنية
+            </button>
+            <button id="tab3-btn" class="py-2 px-4 md:px-6 rounded-full text-lg font-bold text-gray-700 bg-gray-200 transition-colors duration-300">
+                أدعية عامة
             </button>
         </div>
+    </nav>
 
-        <!-- Counter 2: Istighfar -->
-        <div class="bg-white p-6 md:p-8 rounded-xl shadow-lg mb-8 text-center">
-            <p class="text-2xl md:text-3xl font-bold text-gray-700 mb-4">أستغفر الله لي ولوالدي</p>
-            <div id="istighfarCounter" class="text-5xl md:text-6xl font-extrabold text-green-600 mb-6">0</div>
-            <button id="istighfarBtn" class="w-full px-6 py-4 rounded-full text-white font-bold text-xl shadow-md counter-btn">
-                اضغط هنا
-            </button>
-        </div>
-        
-        <!-- Al-Fatihah -->
-        <div class="prayer-container mb-8">
-            <h2 class="text-2xl font-bold text-center text-gray-700 mb-4">سورة الفاتحة</h2>
-            <p class="prayer-text">
-                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ (1) الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ (2) الرَّحْمَٰنِ الرَّحِيمِ (3) مَالِكِ يَوْمِ الدِّينِ (4) إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ (5) اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ (6) صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ (7)
-            </p>
-        </div>
+    <!-- Tab 1: Adhkar and Duas -->
+    <div id="tab1-content" class="tab-content text-center overflow-auto tab-color-1">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-6 mb-6 drop-shadow-lg">صدقة جارية للمتوفي</h1>
 
-        <!-- Al-Takathur -->
-        <div class="prayer-container mb-8">
-            <h2 class="text-2xl font-bold text-center text-gray-700 mb-4">سورة التكاثر</h2>
-            <p class="prayer-text">
-                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ (1) أَلْهَاكُمُ التَّكَاثُرُ (2) حَتَّىٰ زُرْتُمُ الْمَقَابِرَ (3) كَلَّا سَوْفَ تَعْلَمُونَ (4) ثُمَّ كَلَّا سَوْفَ تَعْلَمُونَ (5) كَلَّا لَوْ تَعْلَمُونَ عِلْمَ الْيَقِينِ (6) لَتَرَوُنَّ الْجَحِيمَ (7) ثُمَّ لَتَرَوُنَّهَا عَيْنَ الْيَقِينِ (8) ثُمَّ لَتُسْأَلُنَّ يَوْمَئِذٍ عَنِ النَّعِيمِ (9)
-            </p>
-        </div>
-        
-        <!-- Al-Mulk -->
-        <div class="prayer-container mb-8">
-            <h2 class="text-2xl font-bold text-center text-gray-700 mb-4">سورة الملك</h2>
-            <p class="prayer-text">
-                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ (1) تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ (2) الَّذِي خَلَقَ الْمَوْتَ وَالْحَيَاةَ لِيَبْلُوَكُمْ أَيُّكُمْ أَحْسَنُ عَمَلًا وَهُوَ الْعَزِيزُ الْغَفُورُ (3) الَّذِي خَلَقَ سَبْعَ سَمَاوَاتٍ طِبَاقًا مَّا تَرَىٰ فِي خَلْقِ الرَّحْمَٰنِ مِن تَفَاوُتٍ فَارْجِعِ الْبَصَرَ هَلْ تَرَىٰ مِن فُطُورٍ (4) ثُمَّ ارْجِعِ الْبَصَرَ كَرَّتَيْنِ يَنقَلِبْ إِلَيْكَ الْبَصَرُ خَاسِئًا وَهُوَ حَسِيرٌ (5) وَلَقَدْ زَيَّنَّا السَّمَاءَ الدُّنْيَا بِمَصَابِيحَ وَجَعَلْنَاهَا رُجُومًا لِّلشَّيَاطِينِ وَأَعْتَدْنَا لَهُمْ عَذَابَ السَّعِيرِ (6) وَلِلَّذِينَ كَفَرُوا بِرَبِّهِمْ عَذَابُ جَهَنَّمَ وَبِئْسَ الْمَصِيرُ (7) إِذَا أُلْقُوا فِيهَا سَمِعُوا لَهَا شَهِيقًا وَهِيَ تَفُورُ (8) تَكَادُ تَمَيَّزُ مِنَ الْغَيْظِ كُلَّمَا أُلْقِيَ فِيهَا فَوْجٌ سَأَلَهُمْ خَزَنَتُهَا أَلَمْ يَأْتِكُمْ نَذِيرٌ (9) قَالُوا بَلَىٰ قَدْ جَاءَنَا نَذِيرٌ فَكَذَّبْنَا وَقُلْنَا مَا نَزَّلَ اللَّهُ مِن شَيْءٍ إِنْ أَنتُمْ إِلَّا فِي ضَلَالٍ كَبِيرٍ (10) وَقَالُوا لَوْ كُنَّا نَسْمَعُ أَوْ نَعْقِلُ مَا كُنَّا فِي أَصْحَابِ السَّعِيرِ (11) فَاعْتَرَفُوا بِذَنبِهِمْ فَسُحْقًا لِّأَصْحَابِ السَّعِيرِ (12) إِنَّ الَّذِينَ يَخْشَوْنَ رَبَّهُم بِالْغَيْبِ لَهُم مَّغْفِرَةٌ وَأَجْرٌ كَبِيرٌ (13) وَأَسِرُّوا قَوْلَكُمْ أَوِ اجْهَرُوا بِهِ إِنَّهُ عَلِيمٌ بِذَاتِ الصُّدُورِ (14) أَلَا يَعْلَمُ مَنْ خَلَقَ وَهُوَ اللَّطِيفُ الْخَبِيرُ (15) هُوَ الَّذِي جَعَلَ لَكُمُ الْأَرْضَ ذَلُولًا فَامْشُوا فِي مَنَاكِبِهَا وَكُلُوا مِن رِّزْقِهِ وَإِلَيْهِ النُّشُورُ (16) أَأَمِنتُم مَّن فِي السَّمَاءِ أَن يَخْسِفَ بِكُمُ الْأَرْضَ فَإِذَا هِيَ تَمُورُ (17) أَمْ أَمِنتُم مَّن فِي السَّمَاءِ أَن يُرْسِلَ عَلَيْكُمْ حَاصِبًا فَسَتَعْلَمُونَ كَيْفَ نَذِيرِ (18) وَلَقَدْ كَذَّبَ الَّذِينَ مِن قَبْلِهِمْ فَكَيْفَ كَانَ نَكِيرِ (19) أَوَلَمْ يَرَوْا إِلَى الطَّيْرِ فَوْقَهُمْ صَافَّاتٍ وَيَقْبِضْنَ مَا يُمْسِكُهُنَّ إِلَّا الرَّحْمَٰنُ إِنَّهُ بِكُلِّ شَيْءٍ بَصِيرٌ (20) أَمَّنْ هَٰذَا الَّذِي هُوَ جُندٌ لَّكُمْ يَنصُرُكُم مِّن دُونِ الرَّحْمَٰنِ إِنِ الْكَافِرُونَ إِلَّا فِي غُرُورٍ (21) أَمَّنْ هَٰذَا الَّذِي يَرْزُقُكُمْ إِنْ أَمْسَكَ رِزْقَهُ بَل لَّجُّوا فِي عُتُوٍّ وَنُفُورٍ (22) أَفَمَن يَمْشِي مُكِبًّا عَلَىٰ وَجْهِهِ أَهْدَىٰ أَمَّن يَمْشِي سَوِيًّا عَلَىٰ صِرَاطٍ مُّسْتَقِيمٍ (23) قُلْ هُوَ الَّذِي أَنشَأَكُمْ وَجَعَلَ لَكُمُ السَّمْعَ وَالْأَبْصَارَ وَالْأَفْئِدَةَ قَلِيلًا مَّا تَشْكُرُونَ (24) قُلْ هُوَ الَّذِي ذَرَأَكُمْ فِي الْأَرْضِ وَإِلَيْهِ تُحْشَرُونَ (25) وَيَقُولُونَ مَتَىٰ هَٰذَا الْوَعْدُ إِن كُنتُمْ صَادِقِينَ (26) قُلْ إِنَّمَا الْعِلْمُ عِندَ اللَّهِ وَإِنَّمَا أَنَا نَذِيرٌ مُّبِينٌ (27) فَلَمَّا رَأَوْهُ زُلْفَةً سِيئَتْ وُجُوهُ الَّذِينَ كَفَرُوا وَقِيلَ هَٰذَا الَّذِي كُنتُم بِهِ تَدَّعُونَ (28) قُلْ أَرَأَيْتُمْ إِنْ أَهْلَكَنِيَ اللَّهُ وَمَن مَّعِيَ أَوْ رَحِمَنَا فَمَن يُجِيرُ الْكَافِرِينَ مِنْ عَذَابٍ أَلِيمٍ (29) قُلْ هُوَ الرَّحْمَٰنُ آمَنَّا بِهِ وَعَلَيْهِ تَوَكَّلْنَا فَسَتَعْلَمُونَ مَنْ هُوَ فِي ضَلَالٍ مُّبِينٍ (30) قُلْ أَرَأَيْتُمْ إِنْ أَصْبَحَ مَاؤُكُمْ غَوْرًا فَمَن يَأْتِيكُم بِمَاءٍ مَّعِينٍ (31)
-            </p>
-        </div>
-
-        <!-- Dua'a for the deceased -->
-        <div class="prayer-container mb-8">
-            <h2 class="text-2xl font-bold text-center text-gray-700 mb-4">دعاء للمتوفين بصيغة الجمع</h2>
-            <p class="prayer-text">
-                اللهم اغفر لجميع موتى المسلمين الذين شهدوا لك بالوحدانية، ولنبيك بالرسالة، وماتوا على ذلك، اللهم اغفر لهم وارحمهم، وعافهم واعف عنهم، وأكرم نزلهم، ووسع مدخلهم، واغسلهم بالماء والثلج والبرد، ونقهم من الذنوب والخطايا كما ينقى الثوب الأبيض من الدنس. اللهم اجعل قبورهم روضة من رياض الجنة، ولا تجعلها حفرة من حفر النار. اللهم انقلهم من ضيق اللحود ومراتع الدود إلى جناتك جنات الخلود، في سدر مخضود، وطلح منضود، وظل ممدود. يا رب ارحم موتانا وموتى المسلمين واغفر لهم وتجاوز عن سيئاتهم.
-            </p>
+        <!-- Counters Section -->
+        <div class="w-full max-w-sm mx-auto p-4 md:p-6 mb-8 bg-white/80 rounded-2xl shadow-xl backdrop-blur-sm">
+            <!-- Counter 1: Tasbeeh -->
+            <div class="mb-6">
+                <p class="text-xl md:text-2xl font-bold text-gray-700 mb-4">سبحان الله وبحمده سبحان الله العظيم</p>
+                <div id="counter1" class="text-5xl font-extrabold text-orange-600 mb-6 drop-shadow-md">0</div>
+                <button id="btn1" class="w-full px-6 py-4 rounded-full text-white font-bold text-xl counter-btn counter-color-orange">
+                    اضغط هنا
+                </button>
+            </div>
+            <!-- Counter 2: Istighfar -->
+            <div class="mb-6">
+                <p class="text-xl md:text-2xl font-bold text-gray-700 mb-4">أستغفر الله لي و لأبي و أمي</p>
+                <div id="counter2" class="text-5xl font-extrabold text-sky-600 mb-6 drop-shadow-md">0</div>
+                <button id="btn2" class="w-full px-6 py-4 rounded-full text-white font-bold text-xl counter-btn counter-color-sky">
+                    اضغط هنا
+                </button>
+            </div>
+            <!-- Counter 3: General Dhikr -->
+            <div>
+                <p class="text-xl md:text-2xl font-bold text-gray-700 mb-4">
+                    سبحان الله و الحمدلله و لا إله إلا الله و الله اكبر ولا حول ولا قوة إلا بالله
+                </p>
+                <div id="counter3" class="text-5xl font-extrabold text-yellow-600 mb-6 drop-shadow-md">0</div>
+                <button id="btn3" class="w-full px-6 py-4 rounded-full text-white font-bold text-xl counter-btn counter-color-yellow">
+                    اضغط هنا
+                </button>
+            </div>
         </div>
 
-        <!-- Image of a child praying -->
-        <div class="image-container">
-            <img src="https://placehold.co/400x300/e2e8f0/1a202c?text=طفل+يدعو" alt="طفل يدعو" class="w-full max-w-sm">
+        <!-- Dua for the deceased section -->
+        <div class="w-full max-w-xl mx-auto p-6 md:p-8 mb-6 bg-white/80 rounded-2xl shadow-xl backdrop-blur-sm">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-4">أدعية للمتوفي</h2>
+            <ul class="text-lg md:text-xl text-gray-600 leading-relaxed space-y-4 text-right">
+                <li><span class="font-bold text-green-700">1.</span> اللهم اغفر له وارحمه، وعافه واعف عنه، وأكرم نزله، ووسع مدخله، واغسله بالماء والثلج والبرد، ونقه من الخطايا كما ينقى الثوب الأبيض من الدنس.</li>
+                <li><span class="font-bold text-green-700">2.</span> اللهم اجعل قبره روضة من رياض الجنة، ولا تجعله حفرة من حفر النار.</li>
+                <li><span class="font-bold text-green-700">3.</span> اللهم افسح له في قبره ومد بصره، وافرش قبره من فراش الجنة.</li>
+                <li><span class="font-bold text-green-700">4.</span> اللهم أبدله دارًا خيرًا من داره، وأهلاً خيرًا من أهله، وزوجًا خيرًا من زوجه، وأدخله الجنة وأعذه من عذاب القبر ومن عذاب النار.</li>
+                <li><span class="font-bold text-green-700">5.</span> اللهم إنه عبدك وابن عبدك وابن أمتك، احتاج إلى رحمتك، وأنت غني عن عذابه، إن كان محسنًا فزد في حسناته، وإن كان مسيئًا فتجاوز عنه.</li>
+                <li><span class="font-bold text-green-700">6.</span> اللهم يَمِّن كتابه، وهوِّن حسابه، ولَيِّن ترابه، وألهمه حسن الجواب، وطيب ثراه وأكرم مثواه، واجعل الجنة مستقره ومأواه.</li>
+                <li><span class="font-bold text-green-700">7.</span> اللهم إنه كان يشهد أن لا إله إلا أنت، وأن محمدًا عبدك ورسولك، وأنت أعلم به، اللهم إنا نتوسل بك إليك، ونقسم بك عليك أن ترحمه ولا تعذبه، وأن تثبته عند السؤال.</li>
+                <li><span class="font-bold text-green-700">8.</span> اللهم أنزل على قبره الضياء والنور والفسحة والسرور.</li>
+                <li><span class="font-bold text-green-700">9.</span> اللهم ارحم من صام معنا رمضان وخلف لنا ذكراه، اللهم اجعل قبره روضة من رياض الجنة.</li>
+                <li><span class="font-bold text-green-700">10.</span> اللهم ارحم روحاً صعدت إليك ولم يعد بيننا وبينها إلا الدعاء.</li>
+                <li><span class="font-bold text-green-700">11.</span> اللهم اجعل عن يمينه نوراً، وعن شماله نوراً، ومن أمامه نوراً، ومن خلفه نوراً، ومن فوقه نوراً، حتى تبعثه آمناً مطمئناً في نور من نورك.</li>
+                <li><span class="font-bold text-green-700">12.</span> اللهم ارحم أرواحاً كانت تفرح بقدوم رمضان، والآن تنتظر منك فرحة في الجنة.</li>
+                <li><span class="font-bold text-green-700">13.</span> اللهم يا باسط اليدين بالعطايا، يا مجيب دعوة الداعي إذا دعا، يا حنان يا منان، ارحم فلان بن فلان واغفر له.</li>
+                <li><span class="font-bold text-green-700">14.</span> اللهم اجعل مثواه الجنة، واجمعنا به في مستقر رحمتك.</li>
+                <li><span class="font-bold text-green-700">15.</span> اللهم ارحمه رحمة واسعة، اللهم عامله بما أنت أهله، ولا تعامله بما هو أهله.</li>
+            </ul>
         </div>
+    </div>
 
-    </main>
+    <!-- Tab 2: Surahs -->
+    <div id="tab2-content" class="tab-content text-center hidden overflow-auto tab-color-2">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-6 mb-6 drop-shadow-lg">سور قرآنية</h1>
+
+        <div class="w-full max-w-xl mx-auto p-4 md:p-6 mb-8">
+            <div class="bubble bg-green-100 text-gray-800 font-bold p-6 mb-4 rounded-xl text-center">
+                <h2 class="text-2xl md:text-3xl mb-4">سورة الملك</h2>
+                <p class="text-lg leading-relaxed">
+                    بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ (1) تَبَارَكَ الَّذِي بِيَدِهِ الْمُلْكُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ (2) الَّذِي خَلَقَ الْمَوْتَ وَالْحَيَاةَ لِيَبْلُوَكُمْ أَيُّكُمْ أَحْسَنُ عَمَلًا وَهُوَ الْعَزِيزُ الْغَفُورُ (3) الَّذِي خَلَقَ سَبْعَ سَمَاوَاتٍ طِبَاقًا مَّا تَرَىٰ فِي خَلْقِ الرَّحْمَٰنِ مِن تَفَاوُتٍ فَارْجِعِ الْبَصَرَ هَلْ تَرَىٰ مِن فُطُورٍ (4) ثُمَّ ارْجِعِ الْبَصَرَ كَرَّتَيْنِ يَنقَلِبْ إِلَيْكَ الْبَصَرُ خَاسِئًا وَهُوَ حَسِيرٌ (5) وَلَقَدْ زَيَّنَّا السَّمَاءَ الدُّنْيَا بِمَصَابِيحَ وَجَعَلْنَاهَا رُجُومًا لِّلشَّيَاطِينِ وَأَعْتَدْنَا لَهُمْ عَذَابَ السَّعِيرِ (6) وَلِلَّذِينَ كَفَرُوا بِرَبِّهِمْ عَذَابُ جَهَنَّمَ وَبِئْسَ الْمَصِيرُ (7) إِذَا أُلْقُوا فِيهَا سَمِعُوا لَهَا شَهِيقًا وَهِيَ تَفُورُ (8) تَكَادُ تَمَيَّزُ مِنَ الْغَيْظِ كُلَّمَا أُلْقِيَ فِيهَا فَوْجٌ سَأَلَهُمْ خَزَنَتُهَا أَلَمْ يَأْتِكُمْ نَذِيرٌ (9) قَالُوا بَلَىٰ قَدْ جَاءَنَا نَذِيرٌ فَكَذَّبْنَا وَقُلْنَا مَا نَزَّلَ اللَّهُ مِن شَيْءٍ إِنْ أَنتُمْ إِلَّا فِي ضَلَالٍ كَبِيرٍ (10) وَقَالُوا لَوْ كُنَّا نَسْمَعُ أَوْ نَعْقِلُ مَا كُنَّا فِي أَصْحَابِ السَّعِيرِ (11) فَاعْتَرَفُوا بِذَنبِهِمْ فَسُحْقًا لِّأَصْحَابِ السَّعِيرِ (12) إِنَّ الَّذِينَ يَخْشَوْنَ رَبَّهُم بِالْغَيْبِ لَهُم مَّغْفِرَةٌ وَأَجْرٌ كَبِيرٌ (13) وَأَسِرُّوا قَوْلَكُمْ أَوِ اجْهَرُوا بِهِ إِنَّهُ عَلِيمٌ بِذَاتِ الصُّدُورِ (14) أَلَا يَعْلَمُ مَنْ خَلَقَ وَهُوَ اللَّطِيفُ الْخَبِيرُ (15) هُوَ الَّذِي جَعَلَ لَكُمُ الْأَرْضَ ذَلُولًا فَامْشُوا فِي مَنَاكِبِهَا وَكُلُوا مِن رِّزْقِهِ وَإِلَيْهِ النُّشُورُ (16) أَأَمِنتُم مَّن فِي السَّمَاءِ أَن يَخْسِفَ بِكُمُ الْأَرْضَ فَإِذَا هِيَ تَمُورُ (17) أَمْ أَمِنتُم مَّن فِي السَّمَاءِ أَن يُرْسِلَ عَلَيْكُمْ حَاصِبًا فَسَتَعْلَمُونَ كَيْفَ نَذِيرِ (18) وَلَقَدْ كَذَّبَ الَّذِينَ مِن قَبْلِهِمْ فَكَيْفَ كَانَ نَكِيرِ (19) أَوَلَمْ يَرَوْا إِلَى الطَّيْرِ فَوْقَهُمْ صَافَّاتٍ وَيَقْبِضْنَ مَا يُمْسِكُهُنَّ إِلَّا الرَّحْمَٰنُ إِنَّهُ بِكُلِّ شَيْءٍ بَصِيرٌ (20) أَمَّنْ هَٰذَا الَّذِي هُوَ جُندٌ لَّكُمْ يَنصُرُكُم مِّن دُونِ الرَّحْمَٰنِ إِنِ الْكَافِرُونَ إِلَّا فِي غُرُورٍ (21) أَمَّنْ هَٰذَا الَّذِي يَرْزُقُكُمْ إِنْ أَمْسَكَ رِزْقَهُ بَل لَّجُّوا فِي عُتُوٍّ وَنُفُورٍ (22) أَفَمَن يَمْشِي مُكِبًّا عَلَىٰ وَجْهِهِ أَهْدَىٰ أَمَّن يَمْشِي سَوِيًّا عَلَىٰ صِرَاطٍ مُّسْتَقِيمٍ (23) قُلْ هُوَ الَّذِي أَنشَأَكُمْ وَجَعَلَ لَكُمُ السَّمْعَ وَالْأَبْصَارَ وَالْأَفْئِدَةَ قَلِيلًا مَّا تَشْكُرُونَ (24) قُلْ هُوَ الَّذِي ذَرَأَكُمْ فِي الْأَرْضِ وَإِلَيْهِ تُحْشَرُونَ (25) وَيَقُولُونَ مَتَىٰ هَٰذَا الْوَعْدُ إِن كُنتُمْ صَادِقِينَ (26) قُلْ إِنَّمَا الْعِلْمُ عِندَ اللَّهِ وَإِنَّمَا أَنَا نَذِيرٌ مُّبِينٌ (27) فَلَمَّا رَأَوْهُ زُلْفَةً سِيئَتْ وُجُوهُ الَّذِينَ كَفَرُوا وَقِيلَ هَٰذَا الَّذِي كُنتُم بِهِ تَدَّعُونَ (28) قُلْ أَرَأَيْتُمْ إِنْ أَهْلَكَنِيَ اللَّهُ وَمَن مَّعِيَ أَوْ رَحِمَنَا فَمَن يُجِيرُ الْكَافِرِينَ مِنْ عَذَابٍ أَلِيمٍ (29) قُلْ هُوَ الرَّحْمَٰنُ آمَنَّا بِهِ وَعَلَيْهِ تَوَكَّلْنَا فَسَتَعْلَمُونَ مَنْ هُوَ فِي ضَلَالٍ مُّبِينٍ (30) قُلْ أَرَأَيْتُمْ إِنْ أَصْبَحَ مَاؤُكُمْ غَوْرًا فَمَن يَأْتِيكُم بِمَاءٍ مَّعِينٍ (31)
+                </p>
+            </div>
+            <div class="bubble bg-yellow-100 text-gray-800 font-bold p-6 mb-4 rounded-xl text-center">
+                <h2 class="text-2xl md:text-3xl mb-4">سورة الفاتحة</h2>
+                <p class="text-lg leading-relaxed">
+                    بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ (1) الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ (2) الرَّحْمَٰنِ الرَّحِيمِ (3) مَالِكِ يَوْمِ الدِّينِ (4) إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ (5) اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ (6) صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ (7)
+                </p>
+            </div>
+            <div class="bubble bg-purple-100 text-gray-800 font-bold p-6 mb-4 rounded-xl text-center">
+                <h2 class="text-2xl md:text-3xl mb-4">سورة التكاثر</h2>
+                <p class="text-lg leading-relaxed">
+                    بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ (1) أَلْهَاكُمُ التَّكَاثُرُ (2) حَتَّىٰ زُرْتُمُ الْمَقَابِرَ (3) كَلَّا سَوْفَ تَعْلَمُونَ (4) ثُمَّ كَلَّا سَوْفَ تَعْلَمُونَ (5) كَلَّا لَوْ تَعْلَمُونَ عِلْمَ الْيَقِينِ (6) لَتَرَوُنَّ الْجَحِيمَ (7) ثُمَّ لَتَرَوُنَّهَا عَيْنَ الْيَقِينِ (8) ثُمَّ لَتُسْأَلُنَّ يَوْمَئِذٍ عَنِ النَّعِيمِ (9)
+                </p>
+            </div>
+            <div class="bubble bg-blue-100 text-gray-800 font-bold p-6 rounded-xl text-center">
+                <h2 class="text-2xl md:text-3xl mb-4">سورة الكافرون</h2>
+                <p class="text-lg leading-relaxed">
+                    بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ (1) قُلْ يَا أَيُّهَا الْكَافِرُونَ (2) لَا أَعْبُدُ مَا تَعْبُدُونَ (3) وَلَا أَنتُمْ عَابِدُونَ مَا أَعْبُدُ (4) وَلَا أَنَا عَابِدٌ مَّا عَبَدتُّمْ (5) وَلَا أَنتُمْ عَابِدُونَ مَا أَعْبُدُ (6) لَكُمْ دِينُكُمْ وَلِيَ دِينِ
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tab 3: General Duas -->
+    <div id="tab3-content" class="tab-content text-center hidden overflow-auto tab-color-3">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-6 mb-6 drop-shadow-lg">أدعية عامة</h1>
+        <div class="w-full max-w-xl mx-auto p-4 md:p-6 mb-8 bg-white/80 rounded-2xl shadow-xl backdrop-blur-sm">
+            <ul class="text-lg md:text-xl text-gray-700 space-y-4 text-right">
+                <li><span class="font-bold text-green-700">1.</span> اللهم إني أسألك خير المسألة، وخير الدعاء، وخير النجاح، وخير العمل، وخير الثواب، وخير الحياة، وخير الممات.</li>
+                <li><span class="font-bold text-green-700">2.</span> اللهم اجعل في قلبي نوراً، وفي بصري نوراً، وفي سمعي نوراً، وعن يميني نوراً، وعن يساري نوراً.</li>
+                <li><span class="font-bold text-green-700">3.</span> اللهم إني أعوذ بك من شر ما عملت، ومن شر ما لم أعمل.</li>
+                <li><span class="font-bold text-green-700">4.</span> اللهم إني أعوذ بك من الهم والحزن، والعجز والكسل، والبخل والجبن.</li>
+                <li><span class="font-bold text-green-700">5.</span> اللهم إني أعوذ بك من العذاب في القبر، ومن عذاب النار.</li>
+                <li><span class="font-bold text-green-700">6.</span> اللهم اغفر لي خطيئتي وجهلي، وإسرافي في أمري، وما أنت أعلم به مني.</li>
+                <li><span class="font-bold text-green-700">7.</span> اللهم إني أعوذ بك من فتنة النار، وعذاب النار، وشر فتنة الغنى.</li>
+                <li><span class="font-bold text-green-700">8.</span> اللهم إني أعوذ بك من الفقر، والقلة، والذلة، وأعوذ بك من أن أظلم أو أُظلم.</li>
+                <li><span class="font-bold text-green-700">9.</span> اللهم اكفني بحلالك عن حرامك، وأغنني بفضلك عمن سواك.</li>
+                <li><span class="font-bold text-green-700">10.</span> اللهم إني أعوذ بك من جهد البلاء، ودرك الشقاء، وسوء القضاء، وشماتة الأعداء.</li>
+                <li><span class="font-bold text-green-700">11.</span> اللهم لك الحمد أنت نور السماوات والأرض ومن فيهن، ولك الحمد أنت قيّم السماوات والأرض ومن فيهن.</li>
+                <li><span class="font-bold text-green-700">12.</span> اللهم أعني على ذكرك، وشكرك، وحسن عبادتك.</li>
+                <li><span class="font-bold text-green-700">13.</span> رب زدني علماً.</li>
+                <li><span class="font-bold text-green-700">14.</span> اللهم ارزقني من حيث لا أحتسب.</li>
+                <li><span class="font-bold text-green-700">15.</span> اللهم إني أسألك الهدى والتقى والعفاف والغنى.</li>
+                <li><span class="font-bold text-green-700">16.</span> اللهم حبب إلينا الإيمان وزينه في قلوبنا.</li>
+                <li><span class="font-bold text-green-700">17.</span> اللهم إني أسألك العافية في الدنيا والآخرة.</li>
+                <li><span class="font-bold text-green-700">18.</span> اللهم ارحم موتانا، وموتى المسلمين.</li>
+                <li><span class="font-bold text-green-700">19.</span> اللهم ارزقنا حسن الخاتمة.</li>
+                <li><span class="font-bold text-green-700">20.</span> اللهم اجعل القرآن ربيع قلوبنا.</li>
+                <li><span class="font-bold text-green-700">21.</span> اللهم إني أسألك الجنة وما قرب إليها من قول أو عمل.</li>
+                <li><span class="font-bold text-green-700">22.</span> اللهم إني أسألك من خير ما سألك عبدك ونبيك، وأعوذ بك من شر ما استعاذ بك منه عبدك ونبيك.</li>
+                <li><span class="font-bold text-green-700">23.</span> اللهم أحسن عاقبتنا في الأمور كلها، وأجرنا من خزي الدنيا وعذاب الآخرة.</li>
+                <li><span class="font-bold text-green-700">24.</span> اللهم إني أسألك يا الله بأنك الواحد الأحد الصمد الذي لم يلد ولم يولد ولم يكن له كفوًا أحد أن تغفر لي ذنوبي إنك أنت الغفور الرحيم.</li>
+                <li><span class="font-bold text-green-700">25.</span> اللهم إني أسألك العفو والعافية في ديني ودنياي وأهلي ومالي.</li>
+                <li><span class="font-bold text-green-700">26.</span> اللهم اغفر لنا ذنوبنا، وارحم موتانا، وعافنا من البلاء، وارزقنا الرضا.</li>
+                <li><span class="font-bold text-green-700">27.</span> اللهم إني أسألك العافية في بدني، اللهم عافني في سمعي، اللهم عافني في بصري.</li>
+                <li><span class="font-bold text-green-700">28.</span> اللهم إنك عفو تحب العفو فاعف عنا.</li>
+                <li><span class="font-bold text-green-700">29.</span> اللهم إني أعوذ بك من زوال نعمتك، وتحول عافيتك، وفجاءة نقمتك، وجميع سخطك.</li>
+                <li><span class="font-bold text-green-700">30.</span> اللهم إني أسألك من الخير كله عاجله وآجله، ما علمت منه وما لم أعلم، وأعوذ بك من الشر كله عاجله وآجله، ما علمت منه وما لم أعلم.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full bg-gray-900 text-white py-6">
+        <div class="max-w-4xl mx-auto text-center px-4">
+            <p class="text-xl md:text-2xl font-bold mb-4">لدعم التطبيق و مطوره من فضلك تبرع</p>
+            <a href="https://ipn.eg/S/aahhmmaadd/instapay/4Lakvm" class="text-lg md:text-xl text-yellow-300 hover:text-yellow-400 underline font-semibold mb-2 block transition-colors duration-300">
+                اضغط الرابط لإرسال التبرع
+            </a>
+            <p class="text-lg md:text-xl font-mono mb-4 text-gray-300">aahhmmaadd@instapay</p>
+            <p class="text-lg md:text-xl font-bold mb-2">للتواصل والاقتراحات</p>
+            <p class="text-lg md:text-xl font-mono mb-4 text-gray-300">pzkt@outlook.com</p>
+            <a href="tel:+201550243338" class="text-lg md:text-xl text-blue-400 hover:text-blue-500 underline font-semibold transition-colors duration-300">
+                +201550243338
+            </a>
+        </div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const tasbeehBtn = document.getElementById('tasbeehBtn');
-            const istighfarBtn = document.getElementById('istighfarBtn');
-            const tasbeehCounterEl = document.getElementById('tasbeehCounter');
-            const istighfarCounterEl = document.getElementById('istighfarCounter');
-            
-            const colors = ['bg-blue-500', 'bg-green-500', 'bg-red-500', 'bg-yellow-500', 'bg-purple-500'];
-            const counterLimit = 100;
-
-            let tasbeehCount = 0;
-            let istighfarCount = 0;
-            let currentColorIndex = 0;
-
-            function updateCounter(element, count) {
-                element.textContent = count;
-            }
-
-            function changeButtonColor(button) {
-                // Remove previous color
-                button.classList.remove(...colors);
-                // Cycle to the next color
-                currentColorIndex = (currentColorIndex + 1) % colors.length;
-                button.classList.add(colors[currentColorIndex]);
-            }
-            
-            tasbeehBtn.addEventListener('click', () => {
-                tasbeehCount++;
-                if (tasbeehCount > counterLimit) {
-                    tasbeehCount = 1;
+            const tabs = {
+                'tab1': {
+                    btn: document.getElementById('tab1-btn'),
+                    content: document.getElementById('tab1-content')
+                },
+                'tab2': {
+                    btn: document.getElementById('tab2-btn'),
+                    content: document.getElementById('tab2-content')
+                },
+                'tab3': {
+                    btn: document.getElementById('tab3-btn'),
+                    content: document.getElementById('tab3-content')
                 }
-                updateCounter(tasbeehCounterEl, tasbeehCount);
-                changeButtonColor(tasbeehBtn);
-            });
+            };
 
-            istighfarBtn.addEventListener('click', () => {
-                istighfarCount++;
-                if (istighfarCount > counterLimit) {
-                    istighfarCount = 1;
+            const counters = {
+                'btn1': {
+                    count: 0,
+                    element: document.getElementById('counter1'),
+                    limit: 100
+                },
+                'btn2': {
+                    count: 0,
+                    element: document.getElementById('counter2'),
+                    limit: 100
+                },
+                'btn3': {
+                    count: 0,
+                    element: document.getElementById('counter3'),
+                    limit: 100
                 }
-                updateCounter(istighfarCounterEl, istighfarCount);
-                changeButtonColor(istighfarBtn);
-            });
-        });
-    </script>
+            };
 
-</body>
-</html>
-
+            function showTab(tabId) {
+                // Hide all tab contents and reset button styles
+                for (let id in tabs) {
+                    tabs[id].content.classList.add('hidden');
+                    tabs[id].btn.classList.remove('bg-green-600', 'text-white', 'scale-105');
+                    tabs[id].btn.classList.add('bg-gray-200', 'text-gray-700');
+                }
+                // Show the selected tab content
