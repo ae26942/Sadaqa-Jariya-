@@ -205,8 +205,8 @@
                 +201550243338
             </a>
         </div>
-    </footer>
-
+            </footer>
+    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const tabs = {
@@ -249,4 +249,32 @@
                     tabs[id].btn.classList.remove('bg-green-600', 'text-white', 'scale-105');
                     tabs[id].btn.classList.add('bg-gray-200', 'text-gray-700');
                 }
-                // Show the selected tab content
+                // Show the selected tab content and update button style
+                tabs[tabId].content.classList.remove('hidden');
+                tabs[tabId].btn.classList.remove('bg-gray-200', 'text-gray-700');
+                tabs[tabId].btn.classList.add('bg-green-600', 'text-white', 'scale-105');
+            }
+
+            // Tab click handlers
+            tabs.tab1.btn.addEventListener('click', () => showTab('tab1'));
+            tabs.tab2.btn.addEventListener('click', () => showTab('tab2'));
+            tabs.tab3.btn.addEventListener('click', () => showTab('tab3'));
+
+            // Initial tab display
+            showTab('tab1');
+
+            // Counter click handlers
+            for (let btnId in counters) {
+                document.getElementById(btnId).addEventListener('click', () => {
+                    let counter = counters[btnId];
+                    counter.count++;
+                    if (counter.count > counter.limit) {
+                        counter.count = 1;
+                    }
+                    counter.element.textContent = counter.count;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
